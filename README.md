@@ -30,6 +30,7 @@ npm run dev
 
 ```bash
 cd client
+cp .env.example .env
 npm install
 npx expo start --web --clear
 ```
@@ -38,6 +39,7 @@ npx expo start --web --clear
 
 ```bash
 cd driver
+cp ../client/.env.example .env
 npm install
 npm start
 ```
@@ -64,3 +66,4 @@ npm start
 
 - google maps, click, payme kalitlarini `.env` ichida to'ldiring.
 - telefondan test qilinsa `localhost` o'rniga kompyuteringiz ip manzilini yozing.
+- `client/.env` va `driver/.env` ichida `EXPO_PUBLIC_API_BASE_URL` ni backend ishlayotgan manzilga qo'ying (masalan: `http://192.168.1.10:5000`).

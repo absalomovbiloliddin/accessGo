@@ -8,6 +8,7 @@ export default function AuthScreen() {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('+998');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
@@ -31,7 +32,18 @@ export default function AuthScreen() {
 
       {isRegister && <TextInput style={styles.input} value={fullName} onChangeText={setFullName} placeholder="To'liq ism" />}
       <TextInput style={styles.input} value={phone} onChangeText={setPhone} keyboardType="phone-pad" placeholder="Telefon" />
-      <TextInput style={styles.input} value={password} onChangeText={setPassword} secureTextEntry placeholder="Parol" />
+      <View style={styles.passwordRow}>
+        <TextInput
+          style={styles.passwordInput}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+          placeholder="Parol"
+        />
+        <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)} style={styles.eyeBtn}>
+          <Text style={styles.eyeText}>{showPassword ? '🙈' : '👁'}</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity style={styles.mainBtn} onPress={handleSubmit} disabled={loading}>
         <Text style={styles.mainBtnText}>{loading ? 'Yuklanmoqda...' : isRegister ? 'Hisob yaratish' : 'Kirish'}</Text>
@@ -55,6 +67,24 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: '#FAFCFF'
   },
+  passwordRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#C8D1E1',
+    borderRadius: 10,
+    backgroundColor: '#FAFCFF'
+  },
+  passwordInput: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10
+  },
+  eyeBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 8
+  },
+  eyeText: { fontSize: 18 },
   mainBtn: { marginTop: 10, backgroundColor: '#0F7B6C', padding: 13, borderRadius: 10, alignItems: 'center' },
   mainBtnText: { color: '#fff', fontWeight: '700' },
   switchText: { textAlign: 'center', marginTop: 8, color: '#2E4E7E' }

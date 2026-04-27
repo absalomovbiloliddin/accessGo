@@ -98,5 +98,10 @@ CREATE INDEX IF NOT EXISTS idx_ride_locations_ride_id ON ride_locations(ride_id)
 CREATE INDEX IF NOT EXISTS idx_ride_locations_created_at ON ride_locations(created_at);
 
 INSERT INTO users (full_name, phone, password_hash, role)
-SELECT 'Demo Driver', '+998901112233', '$2a$10$uAn6xYm.15nHCqBeb5G4xep8mK5j5w8lyEqTn6rN4E2QFFnGWfSO2', 'driver'
-WHERE NOT EXISTS (SELECT 1 FROM users WHERE phone = '+998901112233');
+VALUES ('Demo Driver', '+998901112233', '$2a$10$bDu3SuJo1FlGVbiuHMxiJeKs9tXkcTatHs.MauLC.PkM/WHFHSGB.', 'driver')
+ON CONFLICT (phone) DO UPDATE
+SET
+  full_name = EXCLUDED.full_name,
+  password_hash = EXCLUDED.password_hash,
+  role = EXCLUDED.role,
+  updated_at = NOW();

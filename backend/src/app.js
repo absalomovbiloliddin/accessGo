@@ -10,11 +10,27 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import driverRoutes from './routes/driverRoutes.js';
 
 const app = express();
+const configuredOrigins = (env.clientOrigin || '')
+  .split(',')
+  .map((item) => item.trim())
+  .filter(Boolean);
+const devOrigins = ['http://localhost:19006', 'http://localhost:8081'];
+const allowAllOrigins = env.clientOrigin === '*';
+const allowedOrigins = new Set([
+  ...configuredOrigins,
+  ...(env.nodeEnv === 'development' ? devOrigins : [])
+]);
 
 app.use(helmet());
 app.use(
   cors({
-    origin: env.clientOrigin === '*' ? true : env.clientOrigin,
+    origin(origin, callback) {
+      if (!origin || allowAllOrigins || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true
   })
 );

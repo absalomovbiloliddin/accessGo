@@ -15,7 +15,11 @@ function Root() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShadowVisible: false
+        }}
+      >
         {!token ? (
           <Stack.Screen name="Login" component={DriverLoginScreen} options={{ title: 'Driver Login' }} />
         ) : (

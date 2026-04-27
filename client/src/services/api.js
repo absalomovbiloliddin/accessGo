@@ -1,7 +1,10 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
-const baseURL = Constants.expoConfig?.extra?.apiBaseUrl || 'http://localhost:5000';
+const configuredBaseUrl = Constants.expoConfig?.extra?.apiBaseUrl;
+const defaultBaseUrl = Platform.OS === 'android' ? 'http://10.0.2.2:5000' : 'http://localhost:5000';
+const baseURL = configuredBaseUrl || defaultBaseUrl;
 
 const api = axios.create({
   baseURL,

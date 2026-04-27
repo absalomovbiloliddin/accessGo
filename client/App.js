@@ -23,7 +23,11 @@ function RootNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShadowVisible: false
+        }}
+      >
         {!hasSeenOnboarding && <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
         {!token ? (
           <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Kirish / Ro\'yxatdan o\'tish' }} />
