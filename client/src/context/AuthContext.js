@@ -49,6 +49,11 @@ export function AuthProvider({ children }) {
 
   const login = async ({ phone, password }) => {
     const { data } = await api.post('/auth/login', { phone, password });
+
+    if (data.user?.role !== 'customer') {
+      throw new Error('bu ilova faqat mijoz uchun, haydovchi ilovasidan kiring');
+    }
+
     await persistSession(data.token, data.user);
     return data;
   };

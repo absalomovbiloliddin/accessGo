@@ -23,20 +23,46 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const handleEstimate = async () => {
-    if (!dropoff.address.trim()) {
-      Alert.alert('Xatolik', 'Manzil kiriting');
+    if (dropoff.lat == null || dropoff.lng == null) {
+      Alert.alert('xatolik', 'qayerga borishni kiriting');
       return;
     }
-    navigation.navigate('FareEstimate', { pickup, dropoff });
+
+    const normalizedDropoff = {
+      ...dropoff,
+      address: dropoff.address?.trim() ? dropoff.address : 'xaritadan tanlangan nuqta'
+    };
+
+    navigation.navigate('FareEstimate', { pickup, dropoff: normalizedDropoff });
   };
 
   const requestRide = async () => {
     try {
+      if (dropoff.lat == null || dropoff.lng == null) {
+        Alert.alert('xatolik', 'qayerga borishni kiriting');
+        return;
+      }
+
       setLoading(true);
-      const { data } = await api.post('/rides/request', { pickup, dropoff });
+
+      const normalizedPickup = {
+        ...pickup,
+        address: pickup.address?.trim() ? pickup.address : 'joriy joylashuv'
+      };
+
+      const normalizedDropoff = {
+        ...dropoff,
+        address: dropoff.address?.trim() ? dropoff.address : 'xaritadan tanlangan nuqta'
+      };
+
+      const { data } = await api.post('/rides/request', {
+        pickup: normalizedPickup,
+        dropoff: normalizedDropoff
+      });
+
       navigation.navigate('Tracking', { ride: data.ride });
     } catch (error) {
-      Alert.alert('Xatolik', error.response?.data?.message || error.message);
+      Alert.alert('xatolik', error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }

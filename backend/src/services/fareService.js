@@ -1,5 +1,3 @@
-import axios from 'axios';
-import env from '../config/env.js';
 
 const PRICING = {
   baseFare: 12000,
@@ -22,37 +20,16 @@ function computeFare(distanceKm, durationMin) {
 }
 
 async function getRouteInfo(origin, destination) {
-  if (!env.googleMapsApiKey) {
-    const distanceKm = Math.max(haversineDistance(origin, destination), 1);
-    const durationMin = Math.ceil((distanceKm / 35) * 60);
-    return {
-      distanceKm,
-      durationMin,
-      fareUzs: computeFare(distanceKm, durationMin)
-    };
-  }
+  const distanceKm = Math.max(haversineDistance(origin, destination), 1);
+  const durationMin = Math.ceil((distanceKm / 35) * 60);
 
-  const url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
-  const response = await axios.get(url, {
-    params: {
-      origins: `${origin.lat},${origin.lng}`,
-      destinations: `${destination.lat},${destination.lng}`,
-      mode: 'driving',
-      key: env.googleMapsApiKey
-    }
-  });
-
-  const element = response.data?.rows?.[0]?.elements?.[0];
-  if (!element || element.status !== 'OK') {
-    throw new Error("Masofa hisoblab bo'lmadi");
-  }
-
-  const distanceKm = Number((element.distance.value / 1000).toFixed(2));
-  const durationMin = Math.ceil(element.duration.value / 60);
-  const fareUzs = computeFare(distanceKm, durationMin);
-
-  return { distanceKm, durationMin, fareUzs };
+  return {
+    distanceKm,
+    durationMin,
+    fareUzs: computeFare(distanceKm, durationMin)
+  };
 }
+
 
 function haversineDistance(a, b) {
   const toRad = (deg) => (deg * Math.PI) / 180;
