@@ -136,7 +136,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.row}>
+        <View style={[styles.row, styles.bottomNav]}>
           <TouchableOpacity style={styles.linkBtn} onPress={() => navigation.navigate('History')}>
             <Text>Tarix</Text>
           </TouchableOpacity>
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
   heading: { fontSize: 20, fontWeight: '700', color: '#0F3F3A' },
   input: { borderWidth: 1, borderColor: '#D8E2E0', borderRadius: 9, padding: 10, backgroundColor: '#F6FBFA' },
   row: { flexDirection: 'row', gap: 8, marginTop: 4 },
+  bottomNav: { marginBottom: 24 },
   btn: { flex: 1, borderRadius: 10, paddingVertical: 11, alignItems: 'center' },
   primary: { backgroundColor: '#0F7B6C' },
   secondary: { backgroundColor: '#2264AA' },
