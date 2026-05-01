@@ -10,6 +10,7 @@ const env = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
   databaseUrl: process.env.DATABASE_URL,
   googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+  paymentReturnUrl: process.env.PAYMENT_RETURN_URL || 'https://accessgo.uz/payment/success',
   click: {
     serviceId: process.env.CLICK_SERVICE_ID,
     merchantId: process.env.CLICK_MERCHANT_ID,

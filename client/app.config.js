@@ -3,32 +3,9 @@ export default {
     name: 'AccessGo Client',
     slug: 'accessgo-client',
     version: '1.0.0',
-    orientation: 'portrait',
-    userInterfaceStyle: 'light',
-    icon: './assets/icon.png',
-    ios: {
-      supportsTablet: false,
-      config: {
-        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || ''
-      }
-    },
-    android: {
-      package: 'uz.accessgo.client',
-      permissions: ['ACCESS_COARSE_LOCATION', 'ACCESS_FINE_LOCATION'],
-      adaptiveIcon: {
-        foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: '#ffffff'
-      },
-      config: {
-        googleMaps: {
-          apiKey: process.env.GOOGLE_MAPS_API_KEY || ''
-        }
-      }
-    },
-    splash: {
-      image: './assets/splash.png',
-      resizeMode: 'contain',
-      backgroundColor: '#ffffff'
+    platforms: ['web'],
+    web: {
+      bundler: 'metro'
     },
     extra: {
       apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL || 'http://localhost:5000',

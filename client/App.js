@@ -25,21 +25,21 @@ function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShadowVisible: false
+          headerShown: false
         }}
       >
         {!hasSeenOnboarding && <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />}
         {!token ? (
-          <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Kirish / Ro\'yxatdan o\'tish' }} />
+          <Stack.Screen name="Auth" component={AuthScreen} />
         ) : (
           <>
-            <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'AccessGo' }} />
-            <Stack.Screen name="FareEstimate" component={FareEstimateScreen} options={{ title: 'Narx Hisobi' }} />
-            <Stack.Screen name="Tracking" component={TrackingScreen} options={{ title: 'Haydovchi Joylashuvi' }} />
-            <Stack.Screen name="Payment" component={PaymentScreen} options={{ title: 'To\'lov' }} />
-            <Stack.Screen name="History" component={HistoryScreen} options={{ title: 'Sayohat Tarixi' }} />
-            <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profil va Sozlamalar' }} />
-            <Stack.Screen name="Sos" component={SosScreen} options={{ title: 'Favqulodda sos' }} />
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="FareEstimate" component={FareEstimateScreen} />
+            <Stack.Screen name="Tracking" component={TrackingScreen} />
+            <Stack.Screen name="Payment" component={PaymentScreen} />
+            <Stack.Screen name="History" component={HistoryScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Sos" component={SosScreen} />
           </>
         )}
       </Stack.Navigator>

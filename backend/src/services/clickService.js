@@ -19,7 +19,7 @@ async function createClickInvoice({ paymentId, amountUzs, phone }) {
     phone_number: phone,
     sign_time: timestamp,
     sign_string: sign,
-    return_url: 'https://accessgo.uz/payment/success'
+    return_url: env.paymentReturnUrl
   };
 
   const response = await axios.post(`${env.click.baseUrl}/invoice/create`, payload, {

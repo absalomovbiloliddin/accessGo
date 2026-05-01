@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
       setPickup({
         lat: pos.coords.latitude,
         lng: pos.coords.longitude,
-        address: 'Joriy joylashuv'
+        address: ''
       });
     })();
   }, []);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Linking, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import api from '../services/api';
 
 const methods = [
@@ -13,11 +13,30 @@ export default function PaymentScreen({ route, navigation }) {
   const [selected, setSelected] = useState('click');
   const [loading, setLoading] = useState(false);
 
+  const openCheckout = async (url, popupRef) => {
+    if (Platform.OS === 'web') {
+      if (popupRef && !popupRef.closed) {
+        popupRef.location.href = url;
+        popupRef.focus();
+      } else {
+        window.location.href = url;
+      }
+      return;
+    }
+
+    await Linking.openURL(url);
+  };
+
   const pay = async () => {
+    let popupRef = null;
     try {
       if (!ride?.id) {
         Alert.alert('Xatolik', 'Ride topilmadi');
         return;
+      }
+
+      if (Platform.OS === 'web' && selected !== 'cash') {
+        popupRef = window.open('', '_blank', 'noopener,noreferrer');
       }
 
       setLoading(true);
@@ -27,13 +46,19 @@ export default function PaymentScreen({ route, navigation }) {
       });
 
       if (data.checkoutUrl) {
-        await Linking.openURL(data.checkoutUrl);
+        await openCheckout(data.checkoutUrl, popupRef);
       } else {
+        if (popupRef && !popupRef.closed) {
+          popupRef.close();
+        }
         Alert.alert('Muvaffaqiyatli', 'Naqd to\'lov qayd qilindi.');
       }
 
       navigation.navigate('History');
     } catch (error) {
+      if (popupRef && !popupRef.closed) {
+        popupRef.close();
+      }
       Alert.alert('Xatolik', error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
