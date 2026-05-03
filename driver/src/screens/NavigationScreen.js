@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, { Marker } from 'react-native-maps';
 import { useDriverAuth } from '../context/DriverAuthContext';
 import { getDriverSocket } from '../services/socket';
 import api from '../services/api';
+
+const mapsModule = Platform.OS === 'web' ? null : require('react-native-maps');
+const MapView = mapsModule?.default;
+const Marker = mapsModule?.Marker;
 
 export default function NavigationScreen({ route }) {
   const { user } = useDriverAuth();
@@ -49,19 +52,29 @@ export default function NavigationScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: ride.pickup_lat,
-          longitude: ride.pickup_lng,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05
-        }}
-      >
-        <Marker coordinate={{ latitude: ride.pickup_lat, longitude: ride.pickup_lng }} title="Pickup" />
-        <Marker coordinate={{ latitude: ride.dropoff_lat, longitude: ride.dropoff_lng }} title="Dropoff" pinColor="blue" />
-        {current && <Marker coordinate={{ latitude: current.latitude, longitude: current.longitude }} title="Men" pinColor="green" />}
-      </MapView>
+      {Platform.OS === 'web' ? (
+        <View style={[styles.map, styles.webMapPlaceholder]}>
+          <Text style={styles.webMapText}>Xarita web versiyada keyinroq qo'shiladi</Text>
+        </View>
+      ) : MapView && Marker ? (
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: ride.pickup_lat,
+            longitude: ride.pickup_lng,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05
+          }}
+        >
+          <Marker coordinate={{ latitude: ride.pickup_lat, longitude: ride.pickup_lng }} title="Pickup" />
+          <Marker coordinate={{ latitude: ride.dropoff_lat, longitude: ride.dropoff_lng }} title="Dropoff" pinColor="blue" />
+          {current && <Marker coordinate={{ latitude: current.latitude, longitude: current.longitude }} title="Men" pinColor="green" />}
+        </MapView>
+      ) : (
+        <View style={[styles.map, styles.webMapPlaceholder]}>
+          <Text style={styles.webMapText}>Xarita moduli topilmadi</Text>
+        </View>
+      )}
 
       <View style={styles.panel}>
         <Text style={styles.title}>Safar navigatsiyasi</Text>
@@ -84,6 +97,16 @@ export default function NavigationScreen({ route }) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { flex: 1 },
+  webMapPlaceholder: {
+    backgroundColor: '#EAF3FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16
+  },
+  webMapText: {
+    color: '#153B66',
+    fontWeight: '700'
+  },
   panel: { backgroundColor: '#fff', padding: 12, gap: 4 },
   title: { fontSize: 18, fontWeight: '700', color: '#153B66' },
   row: { flexDirection: 'row', gap: 8, marginTop: 8 },
